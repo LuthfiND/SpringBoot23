@@ -1,7 +1,8 @@
 package id.sinaukoding23.latihan.service;
 
-
 import id.sinaukoding23.latihan.model.Order;
+import id.sinaukoding23.latihan.model.dto.OrderDTO;
+import id.sinaukoding23.latihan.model.mapper.OrderMapper;
 import id.sinaukoding23.latihan.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,23 +17,22 @@ public class OrderService {
     private OrderRepository repository;
 
     @Transactional(readOnly = true)
-    public List<Order> findAll(){
+    public List<OrderDTO> findAll(){
         List<Order> data = repository.findAllByIsDeleted(false);
 
-
-
-        return data;
+        return OrderMapper.INSTANCE.toDtoList(data);
     }
 
     @Transactional
-    public Order createData(Order param){
-        param.setCreatedDate(new Date());
-        param.setDeleted(false);
-        return repository.save(param);
+    public OrderDTO createData(OrderDTO param){
+        Order data = OrderMapper.INSTANCE.dtoToEntity(param);
+        data = repository.save(data);
+
+        return OrderMapper.INSTANCE.entityToDto(data);
     }
 
     @Transactional
-    public Order updateData(Order param, int id){
+    public OrderDTO updateData(OrderDTO param, int id){
         Order data = repository.findById(id).get();
 
         if (data != null){
@@ -42,15 +42,14 @@ public class OrderService {
             data.setShippedDate(param.getShippedDate() != null ? param.getShippedDate() : data.getShippedDate());
             data.setUpdatedDate(new Date());
 
-            return repository.save(data);
+            return OrderMapper.INSTANCE.entityToDto(repository.save(data));
         }
 
         return null;
     }
-
     @Transactional
     public boolean deleteData(int id){
-        Order data = repository.findById(id).get();
+       Order data = repository.findById(id).get();
 
         if (data != null){
             data.setDeleted(true);

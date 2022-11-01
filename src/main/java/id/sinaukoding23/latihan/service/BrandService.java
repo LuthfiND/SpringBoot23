@@ -1,6 +1,8 @@
 package id.sinaukoding23.latihan.service;
 
 import id.sinaukoding23.latihan.model.Brand;
+import id.sinaukoding23.latihan.model.dto.BrandDTO;
+import id.sinaukoding23.latihan.model.mapper.BrandMapper;
 import id.sinaukoding23.latihan.repository.BrandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,33 +17,36 @@ public class BrandService {
     private BrandRepository repository;
 
     @Transactional(readOnly = true)
-    public List<Brand> findAll(){
+    public List<BrandDTO> findAll() {
         List<Brand> data = repository.findAllByIsDeleted(false);
 
+        List<BrandDTO> res = BrandMapper.INSTANCE.toDtoList(data);
 
-
-        return data;
+        return BrandMapper.INSTANCE.toDtoList(data);
     }
 
     @Transactional
-    public Brand createData(Brand param){
-        param.setCreatedDate(new Date());
-        param.setDeleted(false);
-        return repository.save(param);
+    public BrandDTO createData(BrandDTO param) {
+        Brand data = BrandMapper.INSTANCE.dtoToEntity(param);
+
+        data = repository.save(data);
+
+        return BrandMapper.INSTANCE.entityToDto(data);
     }
 
     @Transactional
-    public Brand updateData(Brand param, int id){
+    public BrandDTO updateData(BrandDTO param, int id){
         Brand data = repository.findById(id).get();
 
         if (data != null){
             data.setBrandName(param.getBrandName() != null ? param.getBrandName() : data.getBrandName());
             data.setUpdatedDate(new Date());
-            return repository.save(data);
+            return BrandMapper.INSTANCE.entityToDto(repository.save(data));
         }
 
         return null;
     }
+
 
     @Transactional
     public boolean deleteData(int id){

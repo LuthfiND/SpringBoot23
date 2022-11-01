@@ -1,7 +1,11 @@
 package id.sinaukoding23.latihan.service;
 
 
+
 import id.sinaukoding23.latihan.model.Product;
+import id.sinaukoding23.latihan.model.dto.ProductDTO;
+import id.sinaukoding23.latihan.model.mapper.OrderMapper;
+import id.sinaukoding23.latihan.model.mapper.ProductMapper;
 import id.sinaukoding23.latihan.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,22 +20,22 @@ public class ProductService {
     private ProductRepository repository;
 
     @Transactional(readOnly = true)
-    public List<Product> findAll() {
+    public List<ProductDTO> findAll(){
         List<Product> data = repository.findAllByIsDeleted(false);
 
-
-        return data;
+        return ProductMapper.INSTANCE.toDtoList(data);
     }
 
     @Transactional
-    public Product createData(Product param) {
-        param.setCreatedDate(new Date());
-        param.setDeleted(false);
-        return repository.save(param);
+    public ProductDTO createData(ProductDTO param){
+        Product data = ProductMapper.INSTANCE.dtoToEntity(param);
+        data = repository.save(data);
+
+        return ProductMapper.INSTANCE.entityToDto(data);
     }
 
     @Transactional
-    public Product updateData(Product param, int id) {
+    public ProductDTO updateData(ProductDTO param, int id){
         Product data = repository.findById(id).get();
 
         if (data != null) {
@@ -40,7 +44,7 @@ public class ProductService {
             data.setListPrice(param.getListPrice() != null ? param.getListPrice() : data.getListPrice());
             data.setUpdatedDate(new Date());
 
-            return repository.save(data);
+            return ProductMapper.INSTANCE.entityToDto(repository.save(data));
         }
 
         return null;

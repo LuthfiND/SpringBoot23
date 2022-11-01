@@ -1,6 +1,8 @@
 package id.sinaukoding23.latihan.service;
 
 import id.sinaukoding23.latihan.model.Customer;
+import id.sinaukoding23.latihan.model.dto.CustomerDTO;
+import id.sinaukoding23.latihan.model.mapper.CustomerMapper;
 import id.sinaukoding23.latihan.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,23 +18,22 @@ public class CustomerService {
     private CustomerRepository repository;
 
     @Transactional(readOnly = true)
-    public List<Customer> findAll(){
+    public List<CustomerDTO> findAll(){
         List<Customer> data = repository.findAllByIsDeleted(false);
 
-//         data.stream().filter( customer -> !customer.isDeleted()).collect(Collectors.toList());
-
-        return data;
+        return CustomerMapper.INSTANCE.toDtoList(data);
     }
 
     @Transactional
-    public Customer createData(Customer param){
-        param.setCreatedDate(new Date());
-        param.setDeleted(false);
-        return repository.save(param);
+    public CustomerDTO createData(CustomerDTO param){
+        Customer data = CustomerMapper.INSTANCE.dtoToEntity(param);
+        data = repository.save(data);
+
+        return CustomerMapper.INSTANCE.entityToDto(data);
     }
 
     @Transactional
-    public Customer updateData(Customer param, int id){
+    public CustomerDTO updateData(CustomerDTO param, int id){
         Customer data = repository.findById(id).get();
 
         if (data != null){
@@ -42,11 +43,11 @@ public class CustomerService {
             data.setEmail(param.getEmail() != null ? param.getEmail() : data.getEmail());
             data.setStreet(param.getStreet() != null ? param.getStreet() : data.getStreet());
             data.setCity(param.getCity() != null ? param.getCity() : data.getCity());
-            data.setState(param.getState() != null ? param.getState() : data.getState());
             data.setZipCode(param.getZipCode() != null ? param.getZipCode() : data.getZipCode());
+            data.setState(param.getState() != null ? param.getState() : data.getState());
             data.setUpdatedDate(new Date());
 
-            return repository.save(data);
+            return CustomerMapper.INSTANCE.entityToDto(repository.save(data));
         }
 
         return null;

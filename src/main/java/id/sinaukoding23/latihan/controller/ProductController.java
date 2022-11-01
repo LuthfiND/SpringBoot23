@@ -1,11 +1,13 @@
 package id.sinaukoding23.latihan.controller;
 
-import id.sinaukoding23.latihan.model.Product;
+import id.sinaukoding23.latihan.common.RestResult;
+import id.sinaukoding23.latihan.model.dto.ProductDTO;
 import id.sinaukoding23.latihan.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -14,39 +16,41 @@ public class ProductController {
     private ProductService service;
 
     @GetMapping("/find-all")
-    public ResponseEntity<?> getAllData(){
-        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
+    public RestResult getAllData(){
+        List<ProductDTO> data = service.findAll();
+
+        return new RestResult(data, data.size() == 0 ? "Data tidak ditemukan" : "Menampilkan data", data.size(), HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> createDate(@RequestBody Product param){
-        Product data = service.createData(param);
+    public RestResult createDate(@RequestBody ProductDTO param){
+        ProductDTO data = service.createData(param);
 
         if (data != null){
-            return new ResponseEntity<>(data, HttpStatus.OK);
+            return new RestResult(data, "Data Berhasil disimpan", HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new RestResult("Data gagal disimpan", HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateData(@RequestBody Product param,
-                                        @RequestParam(name = "id") int id){
-        Product data = service.updateData(param, id);
+    public RestResult updateData(@RequestBody ProductDTO param,
+                                 @RequestParam(name = "id") int id){
+        ProductDTO data = service.updateData(param, id);
 
         if (data != null){
-            return new ResponseEntity<>(data, HttpStatus.OK);
+            return new RestResult(data, "Data Berhasil diupdate", HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new RestResult("Data gagal diupdate", HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteData(@PathVariable int id){
+    public RestResult deleteData(@PathVariable int id){
         if (service.deleteData(id)){
-            return new ResponseEntity<>("Delete Sukses", HttpStatus.OK);
+            return new RestResult("Delete Sukses", HttpStatus.OK);
         }
 
-        return new ResponseEntity<>("Delete Gagal", HttpStatus.BAD_REQUEST);
+        return new RestResult("Delete Gagal", HttpStatus.BAD_REQUEST);
     }
 }
