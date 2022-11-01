@@ -1,20 +1,17 @@
-package id.sinaukoding23.latihan.model.DTO;
+package id.sinaukoding23.latihan.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 
-
 @Getter
 @Setter
 
-public class CustomerDTO extends BaseDTO  {
+public class StoreDTO extends BaseDTO  {
 
-    private Integer customerId;
+    private Integer StoreId;
 
-    private String firstName;
-
-    private String lastName;
+    private String storeName;
 
     private String phone;
 
@@ -27,8 +24,4 @@ public class CustomerDTO extends BaseDTO  {
     private String state;
 
     private String zipCode;
-
-
 }
-
-

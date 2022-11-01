@@ -1,4 +1,4 @@
-package id.sinaukoding23.latihan.model.DTO;
+package id.sinaukoding23.latihan.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
