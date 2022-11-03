@@ -21,6 +21,9 @@ public class StaffDTO extends BaseDTO  {
 
     private Byte active;
 
+    private StoreDTO store;
+
+    private StaffDTO manager;
 }
 
 

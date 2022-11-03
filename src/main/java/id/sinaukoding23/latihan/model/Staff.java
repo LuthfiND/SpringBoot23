@@ -5,6 +5,7 @@ import lombok.Setter;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -33,7 +34,19 @@ public class Staff extends BaseEntity {
     @Column
     private Byte active;
 
+    @OneToMany(mappedBy = "staff")
+    private List<Order> orderList;
 
+    @ManyToOne
+    @JoinColumn(name = "store_id")
+    private Store store;
+
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    private Staff manager;
+
+    @OneToMany(mappedBy = "manager")
+    private List<Staff> staffList;
 
 }
 

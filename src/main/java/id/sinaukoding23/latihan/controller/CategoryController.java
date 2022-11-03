@@ -14,6 +14,7 @@ import java.util.List;
 public class CategoryController {
     @Autowired
     private CategoryService service;
+
     @GetMapping("/find-all")
     public RestResult getAllData(){
         List<CategoryDTO> data = service.findAll();

@@ -17,23 +17,19 @@ public class CategoryService {
     private CategoryRepository repository;
 
     @Transactional(readOnly = true)
-    public List<CategoryDTO> findAll() {
+    public List<CategoryDTO> findAll(){
         List<Category> data = repository.findAllByIsDeleted(false);
-
-        List<CategoryDTO> res = CategoryMapper.INSTANCE.toDtoList(data);
 
         return CategoryMapper.INSTANCE.toDtoList(data);
     }
 
     @Transactional
-    public CategoryDTO createData(CategoryDTO param) {
+    public CategoryDTO createData(CategoryDTO param){
         Category data = CategoryMapper.INSTANCE.dtoToEntity(param);
-
         data = repository.save(data);
 
         return CategoryMapper.INSTANCE.entityToDto(data);
     }
-
 
     @Transactional
     public CategoryDTO updateData(CategoryDTO param, int id){
@@ -64,4 +60,3 @@ public class CategoryService {
         return false;
     }
 }
-

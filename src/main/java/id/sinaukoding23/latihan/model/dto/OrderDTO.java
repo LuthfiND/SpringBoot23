@@ -20,6 +20,12 @@ public class OrderDTO extends BaseDTO  {
 
     private java.sql.Date  shippedDate;
 
+    private CustomerDTO customer;
+
+    private StaffDTO staff;
+
+    private StoreDTO store;
+
 
 }
 

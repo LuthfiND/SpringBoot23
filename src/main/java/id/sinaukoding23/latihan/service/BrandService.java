@@ -17,18 +17,15 @@ public class BrandService {
     private BrandRepository repository;
 
     @Transactional(readOnly = true)
-    public List<BrandDTO> findAll() {
+    public List<BrandDTO> findAll(){
         List<Brand> data = repository.findAllByIsDeleted(false);
-
-        List<BrandDTO> res = BrandMapper.INSTANCE.toDtoList(data);
 
         return BrandMapper.INSTANCE.toDtoList(data);
     }
 
     @Transactional
-    public BrandDTO createData(BrandDTO param) {
+    public BrandDTO createData(BrandDTO param){
         Brand data = BrandMapper.INSTANCE.dtoToEntity(param);
-
         data = repository.save(data);
 
         return BrandMapper.INSTANCE.entityToDto(data);
@@ -41,12 +38,12 @@ public class BrandService {
         if (data != null){
             data.setBrandName(param.getBrandName() != null ? param.getBrandName() : data.getBrandName());
             data.setUpdatedDate(new Date());
+
             return BrandMapper.INSTANCE.entityToDto(repository.save(data));
         }
 
         return null;
     }
-
 
     @Transactional
     public boolean deleteData(int id){

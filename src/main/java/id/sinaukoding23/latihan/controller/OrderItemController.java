@@ -1,8 +1,8 @@
 package id.sinaukoding23.latihan.controller;
 
 import id.sinaukoding23.latihan.common.RestResult;
-import id.sinaukoding23.latihan.model.dto.BrandDTO;
-import id.sinaukoding23.latihan.service.BrandService;
+import id.sinaukoding23.latihan.model.dto.OrderItemDTO;
+import id.sinaukoding23.latihan.service.OrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -10,21 +10,21 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/brands")
-public class BrandController {
+@RequestMapping("/orderitems")
+public class OrderItemController {
     @Autowired
-    private BrandService service;
+    private OrderItemService service;
 
     @GetMapping("/find-all")
     public RestResult getAllData(){
-        List<BrandDTO> data = service.findAll();
+        List<OrderItemDTO> data = service.findAll();
 
         return new RestResult(data, data.size() == 0 ? "Data tidak ditemukan" : "Menampilkan data", data.size(), HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public RestResult createDate(@RequestBody BrandDTO param){
-        BrandDTO data = service.createData(param);
+    public RestResult createDate(@RequestBody OrderItemDTO param){
+        OrderItemDTO data = service.createData(param);
 
         if (data != null){
             return new RestResult(data, "Data Berhasil disimpan", HttpStatus.OK);
@@ -34,9 +34,9 @@ public class BrandController {
     }
 
     @PutMapping("/update")
-    public RestResult updateData(@RequestBody BrandDTO param,
+    public RestResult updateData(@RequestBody OrderItemDTO param,
                                  @RequestParam(name = "id") int id){
-        BrandDTO data = service.updateData(param, id);
+        OrderItemDTO data = service.updateData(param, id);
 
         if (data != null){
             return new RestResult(data, "Data Berhasil diupdate", HttpStatus.OK);

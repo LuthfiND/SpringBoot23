@@ -9,11 +9,13 @@ import java.util.List;
 
 @Mapper
 public interface CategoryMapper {
-
     CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
+
     Category dtoToEntity(CategoryDTO dto);
 
     CategoryDTO entityToDto(Category param);
+
+    List<Category> toEntityList(List<CategoryDTO> data);
 
     List<CategoryDTO> toDtoList(List<Category> data);
 }

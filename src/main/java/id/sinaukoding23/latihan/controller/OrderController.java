@@ -45,6 +45,18 @@ public class OrderController {
         return new RestResult("Data gagal diupdate", HttpStatus.BAD_REQUEST);
     }
 
+    @PutMapping("/update-status")
+    public RestResult updateDataStatus(@RequestBody OrderDTO param,
+                                       @RequestParam(name = "id") int id){
+        OrderDTO data = service.updateOrderStatus(param, id);
+
+        if (data != null){
+            return new RestResult(data, "Data Berhasil diupdate", HttpStatus.OK);
+        }
+
+        return new RestResult("Data gagal diupdate", HttpStatus.BAD_REQUEST);
+    }
+
     @DeleteMapping("/delete/{id}")
     public RestResult deleteData(@PathVariable int id){
         if (service.deleteData(id)){

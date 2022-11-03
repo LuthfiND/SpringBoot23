@@ -5,6 +5,7 @@ import lombok.Setter;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -37,4 +38,8 @@ public class Store extends BaseEntity {
 
     @Column
     private String zipCode;
+
+    @OneToMany(mappedBy = "store")
+    private List<Staff> staffList;
+
 }

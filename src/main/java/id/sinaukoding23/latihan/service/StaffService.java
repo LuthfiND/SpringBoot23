@@ -1,10 +1,17 @@
 package id.sinaukoding23.latihan.service;
 
+import id.sinaukoding23.latihan.model.Customer;
 import id.sinaukoding23.latihan.model.Staff;
+import id.sinaukoding23.latihan.model.Store;
 import id.sinaukoding23.latihan.model.dto.StaffDTO;
+import id.sinaukoding23.latihan.model.dto.StoreDTO;
+import id.sinaukoding23.latihan.model.mapper.CustomerMapper;
 import id.sinaukoding23.latihan.model.mapper.ProductMapper;
 import id.sinaukoding23.latihan.model.mapper.StaffMapper;
+import id.sinaukoding23.latihan.model.mapper.StoreMapper;
+import id.sinaukoding23.latihan.repository.BrandRepository;
 import id.sinaukoding23.latihan.repository.StaffRepository;
+import id.sinaukoding23.latihan.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +24,10 @@ public class StaffService {
     @Autowired
     private StaffRepository repository;
 
+    @Autowired
+    private StoreRepository storeRepository;
+
+
     @Transactional(readOnly = true)
     public List<StaffDTO> findAll(){
         List<Staff> data = repository.findAllByIsDeleted(false);
@@ -26,7 +37,20 @@ public class StaffService {
 
     @Transactional
     public StaffDTO createData(StaffDTO param){
+        Store store = StoreMapper.INSTANCE.dtoToEntity(param.getStore());
+
+        if (param.getStore() != null) {
+            Store resStore = null;
+
+            if (store.getStoreId() != null) {
+                resStore = storeRepository.getById(store.getStoreId());
+            }
+            store.setCreatedDate(resStore != null ? resStore.getCreatedDate() : new Date());
+
+            store = storeRepository.save(store);
+        }
         Staff data = StaffMapper.INSTANCE.dtoToEntity(param);
+        data.setStore(store);
         data = repository.save(data);
 
         return StaffMapper.INSTANCE.entityToDto(data);

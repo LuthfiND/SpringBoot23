@@ -3,35 +3,35 @@ package id.sinaukoding23.latihan.model;
 import lombok.Getter;
 import lombok.Setter;
 
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 
-
+@Table(name = "order_items")
 @Entity
-@Table(name = "products")
-@Getter
 @Setter
-public class Product extends BaseEntity {
+@Getter
+public class OrderItem extends BaseEntity{
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Integer productId;
+    private Integer itemId;
 
     @Column
-    private String productName;
-
-    @Column
-    private Short modelYear;
+    private Integer quantity;
 
     @Column(columnDefinition = "DECIMAL(10,2)")
     private BigDecimal listPrice;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @Column(columnDefinition = "DECIMAL(4,2)")
+    private BigDecimal discount;
 
     @ManyToOne
-    @JoinColumn(name = "brand_id")
-    private Brand brand;
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
 }

@@ -5,6 +5,7 @@ import lombok.Setter;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "brands")
@@ -18,4 +19,8 @@ public class Brand extends BaseEntity  {
 
     @Column
     private String brandName;
+
+    @OneToMany(mappedBy = "brand")
+    private List<Product> productList;
 }
+
